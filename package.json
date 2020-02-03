@@ -4,6 +4,8 @@
   "description": "Display popular GitHub repositories by language.",
   "main": "index.js",
   "scripts": {
+    "start": "node server/server.js",
+    "compile": "babel src --presets @babel/react --out-dir public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Lucas Darian Schwendler Vieira",
