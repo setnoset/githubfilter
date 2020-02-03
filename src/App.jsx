@@ -1,7 +1,18 @@
 class LanguageSelector extends React.Component {
+	constructor() {
+		super();
+		this.handleSelect = this.handleSelect.bind(this);
+	}
+
+	handleSelect(e) {
+		const selector = document.getElementById("language-select");
+		console.log(selector.value)
+		this.props.setLanguage(selector.value);
+	}
+
 	render() {
 		return (
-			<select name="languages" id="language-select">
+			<select name="languages" id="language-select" onChange={this.handleSelect}>
 				<option value="">--Select a language--</option>
 				<option value="javascript">JavaScript</option>
 				<option value="python">Python</option>
@@ -21,7 +32,7 @@ class LanguageSelector extends React.Component {
 class RepositoryList extends React.Component {
 	render() {
 		return (
-			<h2>View filtered repositories</h2>
+			<h2>View filtered repositories for language {this.props.language}</h2>
 		);
 	}
 }
