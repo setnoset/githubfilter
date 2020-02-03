@@ -15,12 +15,22 @@ class RepositoryList extends React.Component {
 }
 
 class RepositoryFilter extends React.Component {
+	constructor() {
+		super();
+		this.state = {language: ''};
+		this.setLanguage = this.setLanguage.bind(this);
+	}
+
+	setLanguage(lang) {
+		this.setState({language: lang});
+	}
+
 	render() {
 		return (
 			<React.Fragment>
 				<h1>Repository Filter</h1>
-				<LanguageSelector/>
-				<RepositoryList/>
+				<LanguageSelector setLanguage={this.setLanguage}/>
+				<RepositoryList language={this.state.language}/>
 			</React.Fragment>
 		);
 	}
