@@ -39,7 +39,7 @@ class RepositoryList extends React.Component {
 	}
 
 	componentDidMount() {
-		setRepositories(this.props.language);
+		this.setRepositories(this.props.language);
 	}
 
 	async setRepositories(lang) {
@@ -66,13 +66,13 @@ class RepositoryList extends React.Component {
 		});
 		const nodes = response.json().data.search.edges.map(node => node.node);
 		const reps = nodes.map(function(node) {
-			return {nameWithOwner: node.nameWithOwner, url: node.url, starCount: node.stargazers.totalCount}
+			return {name: node.nameWithOwner, url: node.url, starCount: node.stargazers.totalCount}
 		});
 		this.setState({reps: reps});
 	}
 
 	render() {
-		const repositoryItems = props.reps.map(rep => <RepositoryItem rep={rep}/>);
+		const repositoryItems = this.state.reps.map(rep => <RepositoryItem rep={rep}/>);
 		return (
 			<table>
 				<thead>
@@ -87,6 +87,16 @@ class RepositoryList extends React.Component {
 			</table>
 		);
 	}
+}
+
+function RepositoryItem(props) {
+	const rep = props.rep;
+	return (
+		<tr>
+			<td><a href={rep.url}>rep.name</a></td>
+			<td>rep.starCount</td>
+		</tr>
+	);
 }
 
 class RepositoryFilter extends React.Component {
