@@ -1,3 +1,5 @@
+const accessToken = "d4ad8a2fed301ce8b91a67a0165e07b75e2e5d79";
+
 class LanguageSelector extends React.Component {
 	constructor() {
 		super();
@@ -59,9 +61,9 @@ class RepositoryList extends React.Component {
 		  }
 		}`;
 
-		const response = await fetch('/graphql', {
+		const response = await fetch('https://api.github.com/graphql', {
 			method: 'POST',
-			headers: { 'Content-Type': 'application/json'},
+			headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
 			body: JSON.stringify({ query, variables: {"q": "language:" + lang} })
 		});
 		const nodes = response.json().data.search.edges.map(node => node.node);
