@@ -86,7 +86,7 @@ class RepositoryList extends React.Component {
 	}
 
 	render() {
-		const repositoryItems = this.state.reps.map(rep => <RepositoryItem rep={rep}/>);
+		const repositoryItems = this.state.reps.map(rep => <RepositoryItem key={rep.name} rep={rep}/>);
 		return (
 			<table>
 				<thead>
