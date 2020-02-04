@@ -43,8 +43,8 @@ class RepositoryList extends React.Component {
 	}
 
 	async setRepositories(lang) {
-		const query = `query langQuery {
-		  search(type: REPOSITORY, query: "language:objective-c", first: 30) {
+		const query = `query langQuery($q: String!) {
+		  search(type: REPOSITORY, query: $q, first: 30) {
 		    edges {
 		      node {
 		        ... on Repository {
@@ -62,13 +62,11 @@ class RepositoryList extends React.Component {
 		const response = await fetch('/graphql', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json'},
-			body: JSON.stringify({ query: query, variables: {lang} })
+			body: JSON.stringify({ query, variables: {"q": "language:" + lang} })
 		});
 		const nodes = response.json().data.search.edges.map(node => node.node);
-		const reps = nodes.map(node => {
-			nameWithOwner: node.nameWithOwner;
-			url: node.url;
-			starCount: node.stargazers.totalCount
+		const reps = nodes.map(function(node) {
+			return {nameWithOwner: node.nameWithOwner, url: node.url, starCount: node.stargazers.totalCount}
 		});
 		this.setState({reps: reps});
 	}
@@ -89,7 +87,6 @@ class RepositoryList extends React.Component {
 			</table>
 		);
 	}
-	
 }
 
 class RepositoryFilter extends React.Component {
