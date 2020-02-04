@@ -56,7 +56,7 @@ class RepositoryList extends React.Component {
 		}
 
 		const query = `query langQuery($q: String!) {
-		  search(type: REPOSITORY, query: $q, first: 30) {
+		  search(type: REPOSITORY, query: $q, first: 100) {
 		    edges {
 		      node {
 		        ... on Repository {
@@ -88,11 +88,11 @@ class RepositoryList extends React.Component {
 	render() {
 		const repositoryItems = this.state.reps.map(rep => <RepositoryItem key={rep.name} rep={rep}/>);
 		return (
-			<table>
+			<table className="bordered-table">
 				<thead>
 					<tr>
-						<th>Repository</th>
 						<th>Star Count</th>
+						<th width='500px'>Repository</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -107,8 +107,8 @@ function RepositoryItem(props) {
 	const rep = props.rep;
 	return (
 		<tr>
-			<td><a href={rep.url}>{rep.name}</a></td>
 			<td>{rep.starCount}</td>
+			<td><a href={rep.url}>{rep.name}</a></td>
 		</tr>
 	);
 }
