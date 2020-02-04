@@ -107,8 +107,8 @@ function RepositoryItem(props) {
 	const rep = props.rep;
 	return (
 		<tr>
-			<td><a href={rep.url}>rep.name</a></td>
-			<td>rep.starCount</td>
+			<td><a href={rep.url}>{rep.name}</a></td>
+			<td>{rep.starCount}</td>
 		</tr>
 	);
 }
