@@ -55,8 +55,12 @@ class RepositoryList extends React.Component {
 			return;
 		}
 
-		const query = `query langQuery($q: String!) {
-		  search(type: REPOSITORY, query: $q, first: 100) {
+		// limit is 100 without pagination
+		// pagination can be implemented using the cursor field
+		const numReps = 100;
+
+		const query = `query langQuery($q: String!, $n: Int!) {
+		  search(type: REPOSITORY, query: $q, first: $n) {
 		    edges {
 		      node {
 		        ... on Repository {
@@ -71,10 +75,11 @@ class RepositoryList extends React.Component {
 		  }
 		}`;
 
+		/* Queries can be slow. Faster queries can be obtained by persisting queries with MongoDB  */
 		const response = await fetch('https://api.github.com/graphql', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
-			body: JSON.stringify({ query, variables: {"q": "language:" + lang} })
+			body: JSON.stringify({ query, variables: {"q": "language:" + lang, "n": numReps} })
 		});
 		const json = await response.json();
 		console.log(json);
