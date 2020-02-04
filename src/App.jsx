@@ -44,7 +44,17 @@ class RepositoryList extends React.Component {
 		this.setRepositories(this.props.language);
 	}
 
+	componentDidUpdate(prevProps) {
+		if (prevProps.language != this.props.language)
+			this.setRepositories(this.props.language);
+	}
+
 	async setRepositories(lang) {
+		if (lang == '') {
+			this.setState({reps: []});
+			return;
+		}
+
 		const query = `query langQuery($q: String!) {
 		  search(type: REPOSITORY, query: $q, first: 30) {
 		    edges {
@@ -66,7 +76,9 @@ class RepositoryList extends React.Component {
 			headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
 			body: JSON.stringify({ query, variables: {"q": "language:" + lang} })
 		});
-		const nodes = response.json().data.search.edges.map(node => node.node);
+		const json = await response.json();
+		console.log(json);
+		const nodes = json.data.search.edges.map(node => node.node);
 		const reps = nodes.map(function(node) {
 			return {name: node.nameWithOwner, url: node.url, starCount: node.stargazers.totalCount}
 		});
