@@ -29,12 +29,67 @@ class LanguageSelector extends React.Component {
 	}
 }
 
+
 class RepositoryList extends React.Component {
+	constructor() {
+		super();
+		this.state = {
+			reps: [],
+		};
+	}
+
+	componentDidMount() {
+		setRepositories(this.props.language);
+	}
+
+	async setRepositories(lang) {
+		const query = `query langQuery {
+		  search(type: REPOSITORY, query: "language:objective-c", first: 30) {
+		    edges {
+		      node {
+		        ... on Repository {
+		          stargazers {
+		            totalCount
+		          }
+		          url
+		          nameWithOwner
+		        }
+		      }
+		    }
+		  }
+		}`;
+
+		const response = await fetch('/graphql', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json'},
+			body: JSON.stringify({ query: query, variables: {lang} })
+		});
+		const nodes = response.json().data.search.edges.map(node => node.node);
+		const reps = nodes.map(node => {
+			nameWithOwner: node.nameWithOwner;
+			url: node.url;
+			starCount: node.stargazers.totalCount
+		});
+		this.setState({reps: reps});
+	}
+
 	render() {
+		const repositoryItems = props.reps.map(rep => <RepositoryItem rep={rep}/>);
 		return (
-			<h2>View filtered repositories for language {this.props.language}</h2>
+			<table>
+				<thead>
+					<tr>
+						<th>Repository</th>
+						<th>Star Count</th>
+					</tr>
+				</thead>
+				<tbody>
+					{repositoryItems}
+				</tbody>
+			</table>
 		);
 	}
+	
 }
 
 class RepositoryFilter extends React.Component {
